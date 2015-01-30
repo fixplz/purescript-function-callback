@@ -1,0 +1,15 @@
+{
+  "name": "purescript-function-callback",
+  "version": "0.1.0",
+  "private": true,
+  "authors": [
+    "Gustavs T <fixplzsecrets@gmail.com>"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "purescript-function-eff": "~0.1.0",
+    "purescript-function-run": "~0.1.0",
+    "purescript-exceptions": "~0.2.2",
+    "purescript-either": "~0.1.4"
+  }
+}
