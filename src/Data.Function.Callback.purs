@@ -21,6 +21,7 @@ import Data.Function
 import Data.Either (Either(..))
 import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Exception (Error())
+import Data.Function.Callback.Other
 
 type CbFn fn val = fn (NodeCb val) Unit
 
@@ -63,15 +64,15 @@ foreign import asEff
 
 foreign import data Errorish :: *
 
-type NodeCb val = Fn2 Errorish val Unit
+type NodeCb val = Cb2 Errorish val
 
-asCb :: forall eff val. Callback eff val -> Fn2 Errorish val Unit
+asCb :: forall eff val. Callback eff val -> Cb2 Errorish val
 
-asCb cb = mkFn2 \err val ->
+asCb cb = asCb2 \err val ->
   let err' = castError err in
   if _isnull err'
-    then runEff (cb (Right val))
-    else runEff (cb (Left err'))
+    then cb (Right val)
+    else cb (Left err')
 
 foreign import castError
   """
@@ -85,6 +86,3 @@ foreign import castError
 
 foreign import _isnull """function _isnull(val) { return val == null }"""
   :: forall val. val -> Boolean
-
-foreign import runEff """function runEff(eff) { return eff() }"""
-  :: forall eff val. Eff eff val -> val
